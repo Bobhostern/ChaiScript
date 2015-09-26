@@ -43,7 +43,7 @@ namespace chaiscript
 
       arity_error(const arity_error &) = default;
 
-      virtual ~arity_error() CHAISCRIPT_NOEXCEPT {}
+      virtual ~arity_error() noexcept {}
 
       int got;
       int expected;

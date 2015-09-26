@@ -88,13 +88,13 @@ namespace chaiscript
       { }
 
         virtual ~Binary_Operator_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           auto lhs = this->children[0]->eval(t_ss);
           auto rhs = this->children[1]->eval(t_ss);
           return do_oper(t_ss, m_oper, text, lhs, rhs);
         }
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE 
+        virtual std::string pretty_print() const override 
         {
           return "(" + this->children[0]->pretty_print() + " " + text + " " + this->children[1]->pretty_print() + ")";
         }
@@ -135,7 +135,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Int, std::move(t_loc)), 
           m_value(std::move(t_bv)) { assert(text != ""); }
         virtual ~Int_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const override{
           return m_value;
         }
 
@@ -150,7 +150,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Float, std::move(t_loc)),
           m_value(std::move(t_bv)) { }
         virtual ~Float_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const override{
           return m_value;
         }
 
@@ -167,7 +167,7 @@ namespace chaiscript
       { }
 
         virtual ~Id_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           if (!m_value.is_undef())
           {
             return m_value;
@@ -224,7 +224,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Eol, std::move(t_loc)) { }
         virtual ~Eol_AST_Node() {}
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE 
+        virtual std::string pretty_print() const override 
         {
           return "\n";
         }
@@ -236,7 +236,7 @@ namespace chaiscript
         Fun_Call_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Fun_Call, std::move(t_loc), std::move(t_children)) { }
         virtual ~Fun_Call_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           chaiscript::eval::detail::Function_Push_Pop fpp(t_ss);
 
           std::vector<Boxed_Value> params;
@@ -276,7 +276,7 @@ namespace chaiscript
           }
         }
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE 
+        virtual std::string pretty_print() const override 
         {
           std::ostringstream oss;
 
@@ -306,7 +306,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Arg_List, std::move(t_loc), std::move(t_children)) { }
         virtual ~Arg_AST_Node() {}
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE 
+        virtual std::string pretty_print() const override 
         {
           std::ostringstream oss;
           for (size_t j = 0; j < this->children.size(); ++j) {
@@ -328,7 +328,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Arg_List, std::move(t_loc), std::move(t_children)) { }
         virtual ~Arg_List_AST_Node() {}
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE 
+        virtual std::string pretty_print() const override 
         {
           std::ostringstream oss;
           for (size_t j = 0; j < this->children.size(); ++j) {
@@ -397,7 +397,7 @@ namespace chaiscript
         Operators::Opers m_oper;
 
         virtual ~Equation_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           chaiscript::eval::detail::Function_Push_Pop fpp(t_ss);
           Boxed_Value rhs = this->children[2]->eval(t_ss); 
           Boxed_Value lhs = this->children[0]->eval(t_ss);
@@ -472,7 +472,7 @@ namespace chaiscript
         Global_Decl_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Global_Decl, std::move(t_loc), std::move(t_children)) { }
         virtual ~Global_Decl_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
 
           const std::string &idname =
             [&]()->const std::string &{
@@ -499,7 +499,7 @@ namespace chaiscript
         Var_Decl_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Var_Decl, std::move(t_loc), std::move(t_children)) { }
         virtual ~Var_Decl_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           if (this->children[0]->identifier == AST_Node_Type::Reference)
           {
             return this->children[0]->eval(t_ss);
@@ -520,7 +520,7 @@ namespace chaiscript
 
         }
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE 
+        virtual std::string pretty_print() const override 
         {
           return "var " + this->children[0]->text;
         }
@@ -533,7 +533,7 @@ namespace chaiscript
         Array_Call_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Array_Call, std::move(t_loc), std::move(t_children)) { }
         virtual ~Array_Call_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           chaiscript::eval::detail::Function_Push_Pop fpp(t_ss);
 
           std::vector<Boxed_Value> params{children[0]->eval(t_ss), children[1]->eval(t_ss)};
@@ -548,7 +548,7 @@ namespace chaiscript
 
         }
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE 
+        virtual std::string pretty_print() const override 
         {
           std::ostringstream oss;
           oss << this->children[0]->pretty_print();
@@ -573,7 +573,7 @@ namespace chaiscript
               children[2]->children[0]->text:children[2]->text) { }
 
         virtual ~Dot_Access_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           chaiscript::eval::detail::Function_Push_Pop fpp(t_ss);
 
 
@@ -628,11 +628,11 @@ namespace chaiscript
           m_value(const_var(text)) { }
         virtual ~Quoted_String_AST_Node() {}
 
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const override {
           return m_value;
         }
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE 
+        virtual std::string pretty_print() const override 
         {
           return "\"" + text + "\"";
         }
@@ -649,11 +649,11 @@ namespace chaiscript
           m_value(const_var(char(text.at(0)))) { }
 
         virtual ~Single_Quoted_String_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const override{
           return m_value;
         }
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE 
+        virtual std::string pretty_print() const override 
         {
           return "'" + text + "'";
         }
@@ -670,7 +670,7 @@ namespace chaiscript
 
         virtual ~Lambda_AST_Node() {}
 
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
 
           const auto captures = [&]()->std::map<std::string, Boxed_Value>{
             std::map<std::string, Boxed_Value> named_captures;
@@ -709,7 +709,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Block, std::move(t_loc), std::move(t_children)) { }
         virtual ~Block_AST_Node() {}
 
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           chaiscript::eval::detail::Scope_Push_Pop spp(t_ss);
 
           const auto num_children = children.size();
@@ -727,7 +727,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Def, std::move(t_loc), std::move(t_children)) { }
 
         virtual ~Def_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           std::vector<std::string> t_param_names;
           size_t numparams = 0;
           AST_NodePtr guardnode;
@@ -791,7 +791,7 @@ namespace chaiscript
         While_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::While, std::move(t_loc), std::move(t_children)) { }
         virtual ~While_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           chaiscript::eval::detail::Scope_Push_Pop spp(t_ss);
 
           try {
@@ -817,7 +817,7 @@ namespace chaiscript
         Class_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Class, std::move(t_loc), std::move(t_children)) { }
         virtual ~Class_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           chaiscript::eval::detail::Scope_Push_Pop spp(t_ss);
 
           /// \todo do this better
@@ -836,7 +836,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::If, std::move(t_loc), std::move(t_children)) 
           { assert(children.size() == 3); }
         virtual ~Ternary_Cond_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           if (get_bool_condition(children[0]->eval(t_ss))) {
             return children[1]->eval(t_ss);
           }
@@ -852,7 +852,7 @@ namespace chaiscript
         If_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::If, std::move(t_loc), std::move(t_children)) { }
         virtual ~If_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
 
           if (get_bool_condition(children[0]->eval(t_ss))) {
             return children[1]->eval(t_ss);
@@ -885,7 +885,7 @@ namespace chaiscript
           { assert(children.size() == 4); }
         virtual ~For_AST_Node() {}
 
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           chaiscript::eval::detail::Scope_Push_Pop spp(t_ss);
 
           try {
@@ -917,7 +917,7 @@ namespace chaiscript
         Switch_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Switch, std::move(t_loc), std::move(t_children)) { }
         virtual ~Switch_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           bool breaking = false;
           size_t currentCase = 1;
           bool hasMatched = false;
@@ -961,7 +961,7 @@ namespace chaiscript
         { assert(children.size() == 2); /* how many children does it have? */ }
 
         virtual ~Case_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           chaiscript::eval::detail::Scope_Push_Pop spp(t_ss);
 
           children[1]->eval(t_ss);
@@ -976,7 +976,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Default, std::move(t_loc), std::move(t_children))
         { assert(children.size() == 1); }
         virtual ~Default_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           chaiscript::eval::detail::Scope_Push_Pop spp(t_ss);
 
           children[0]->eval(t_ss);
@@ -991,7 +991,7 @@ namespace chaiscript
         Inline_Array_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Inline_Array, std::move(t_loc), std::move(t_children)) { }
         virtual ~Inline_Array_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           try {
             std::vector<Boxed_Value> vec;
             if (!children.empty()) {
@@ -1011,7 +1011,7 @@ namespace chaiscript
           }
         }
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE
+        virtual std::string pretty_print() const override
         {
           return "[" + AST_Node::pretty_print() + "]";
         }
@@ -1022,7 +1022,7 @@ namespace chaiscript
         Inline_Map_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Inline_Map, std::move(t_loc), std::move(t_children)) { }
         virtual ~Inline_Map_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           try {
             std::map<std::string, Boxed_Value> retval;
 
@@ -1049,7 +1049,7 @@ namespace chaiscript
         Return_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Return, std::move(t_loc), std::move(t_children)) { }
         virtual ~Return_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           if (!this->children.empty()) {
             throw detail::Return_Value(children[0]->eval(t_ss));
           }
@@ -1065,7 +1065,7 @@ namespace chaiscript
         File_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::File, std::move(t_loc), std::move(t_children)) { }
         virtual ~File_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE {
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override {
           try {
             const auto num_children = children.size();
 
@@ -1091,7 +1091,7 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Reference, std::move(t_loc), std::move(t_children))
         { assert(children.size() == 1); }
 
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           try {
             Boxed_Value bv;
             t_ss.add_object(this->children[0]->text, bv);
@@ -1113,7 +1113,7 @@ namespace chaiscript
         { }
 
         virtual ~Prefix_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           Boxed_Value bv(children[1]->eval(t_ss));
 
           try {
@@ -1140,7 +1140,7 @@ namespace chaiscript
         Break_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Break, std::move(t_loc), std::move(t_children)) { }
         virtual ~Break_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const override{
           throw detail::Break_Loop();
         }
     };
@@ -1150,7 +1150,7 @@ namespace chaiscript
         Continue_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Continue, std::move(t_loc), std::move(t_children)) { }
         virtual ~Continue_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const override{
           throw detail::Continue_Loop();
         }
     };
@@ -1163,7 +1163,7 @@ namespace chaiscript
         { }
 
         virtual ~Noop_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &) const override{
           // It's a no-op, that evaluates to "true"
           return m_value;
         }
@@ -1191,7 +1191,7 @@ namespace chaiscript
         Inline_Range_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Inline_Range, std::move(t_loc), std::move(t_children)) { }
         virtual ~Inline_Range_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           try {
             auto oper1 = children[0]->children[0]->children[0]->eval(t_ss);
             auto oper2 = children[0]->children[0]->children[1]->eval(t_ss);
@@ -1279,7 +1279,7 @@ namespace chaiscript
           return retval;
         }
 
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           Boxed_Value retval;
 
           chaiscript::eval::detail::Scope_Push_Pop spp(t_ss);
@@ -1342,7 +1342,7 @@ namespace chaiscript
         Method_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Method, std::move(t_loc), std::move(t_children)) { }
         virtual ~Method_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
 
           AST_NodePtr guardnode;
 
@@ -1433,7 +1433,7 @@ namespace chaiscript
         Attr_Decl_AST_Node(std::string t_ast_node_text, Parse_Location t_loc, std::vector<AST_NodePtr> t_children) :
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Attr_Decl, std::move(t_loc), std::move(t_children)) { }
         virtual ~Attr_Decl_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE 
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override 
         {
           const auto &d = t_ss->get_parent_locals();
           const auto itr = d.find("_current_class_name");
@@ -1472,12 +1472,12 @@ namespace chaiscript
         { assert(children.size() == 3); }
 
         virtual ~Logical_And_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           return const_var(get_bool_condition(children[0]->eval(t_ss))
               && get_bool_condition(children[2]->eval(t_ss)));
         }
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE
+        virtual std::string pretty_print() const override
         {
           return "(" + AST_Node::pretty_print() + ")";
         }
@@ -1489,12 +1489,12 @@ namespace chaiscript
           AST_Node(std::move(t_ast_node_text), AST_Node_Type::Logical_Or, std::move(t_loc), std::move(t_children)) 
         { assert(children.size() == 3); }
         virtual ~Logical_Or_AST_Node() {}
-        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const CHAISCRIPT_OVERRIDE{
+        virtual Boxed_Value eval_internal(const chaiscript::detail::Dispatch_State &t_ss) const override{
           return const_var(get_bool_condition(children[0]->eval(t_ss))
               || get_bool_condition(children[2]->eval(t_ss)));
         }
 
-        virtual std::string pretty_print() const CHAISCRIPT_OVERRIDE
+        virtual std::string pretty_print() const override
         {
           return "(" + AST_Node::pretty_print() + ")";
         }

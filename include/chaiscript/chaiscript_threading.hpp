@@ -69,7 +69,6 @@ namespace chaiscript
 
       using std::recursive_mutex;
 
-#ifdef CHAISCRIPT_HAS_THREAD_LOCAL
       /// Typesafe thread specific storage. If threading is enabled, this class uses a mutex protected map. If
       /// threading is not enabled, the class always returns the same data, regardless of which thread it is called from.
       template<typename T>
@@ -118,64 +117,6 @@ namespace chaiscript
             }
         };
 
-#else
-
-      /// Typesafe thread specific storage. If threading is enabled, this class uses a mutex protected map. If
-      /// threading is not enabled, the class always returns the same data, regardless of which thread it is called from.
-      /// 
-      /// This version is used if the compiler does not support thread_local
-      template<typename T>
-        class Thread_Storage
-        {
-          public:
-
-            Thread_Storage(void *)
-            {
-            }
-
-            inline const T *operator->() const
-            {
-              return get_tls().get();
-            }
-
-            inline const T &operator*() const
-            {
-              return *get_tls();
-            }
-
-            inline T *operator->()
-            {
-              return get_tls().get();
-            }
-
-            inline T &operator*()
-            {
-              return *get_tls();
-            }
-
-
-          private:
-            /// \todo this leaks thread instances. It needs to be culled from time to time
-            std::shared_ptr<T> get_tls() const
-            {
-              unique_lock<mutex> lock(m_mutex);
-
-              auto itr = m_instances.find(std::this_thread::get_id());
-
-              if (itr != m_instances.end()) { return itr->second; }
-
-              std::shared_ptr<T> new_instance(std::make_shared<T>());
-
-              m_instances.insert(std::make_pair(std::this_thread::get_id(), new_instance));
-
-              return new_instance;
-            }
-
-
-            mutable mutex m_mutex;
-            mutable std::unordered_map<std::thread::id, std::shared_ptr<T> > m_instances;
-        };
-#endif // threading enabled but no tls
 
 #else // threading disabled
       template<typename T>

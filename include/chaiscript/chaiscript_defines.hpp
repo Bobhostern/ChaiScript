@@ -11,13 +11,10 @@
 #define CHAISCRIPT_MSVC _MSC_VER
 #define CHAISCRIPT_HAS_DECLSPEC
 #if _MSC_VER <= 1800
-#define CHAISCRIPT_MSVC_12
+#error "MSVC 2013 is no longer supported"
 #endif
 #endif
 
-#ifndef CHAISCRIPT_MSVC_12
-#define CHAISCRIPT_HAS_MAGIC_STATICS
-#endif
 
 #include <vector>
 
@@ -29,20 +26,9 @@
 #define CHAISCRIPT_WINDOWS
 #endif
 
-#if (defined(__GNUC__) && __GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 8) || (defined(__llvm__) && !defined(CHAISCRIPT_LIBCPP))  
-/// Currently only g++>=4.8 supports this natively
-/// \todo Make this support other compilers when possible
-#define CHAISCRIPT_HAS_THREAD_LOCAL
-#endif
 
 #if (defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 6)
 #define CHAISCRIPT_GCC_4_6
-#endif
-
-#if (defined(__GNUC__) && __GNUC__ > 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7) || defined(CHAISCRIPT_MSVC) || defined(__llvm__)
-#define CHAISCRIPT_OVERRIDE override
-#else
-#define CHAISCRIPT_OVERRIDE
 #endif
 
 
@@ -52,13 +38,6 @@
 #define CHAISCRIPT_MODULE_EXPORT extern "C" 
 #endif
 
-#ifdef CHAISCRIPT_MSVC
-#define CHAISCRIPT_NOEXCEPT throw()
-#define CHAISCRIPT_CONSTEXPR 
-#else
-#define CHAISCRIPT_NOEXCEPT noexcept
-#define CHAISCRIPT_CONSTEXPR constexpr
-#endif
 
 #include <memory>
 
